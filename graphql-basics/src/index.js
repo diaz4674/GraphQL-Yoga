@@ -51,21 +51,25 @@ const comments = [
 		id: "10",
 		comment: "This book is lit!",
 		author: "1",
+		post: "1",
 	},
 	{
 		id: "11",
 		comment: "This book made me cry!",
 		author: "2",
+		post: "2",
 	},
 	{
 		id: "12",
 		comment: "I love this story!",
 		author: "3",
+		post: "3",
 	},
 	{
 		id: "13",
 		comment: "Turtle power!",
 		author: "1",
+		post: "1",
 	},
 ];
 
@@ -94,12 +98,14 @@ const typeDefs = `
 		body: String!
 		published: Boolean!
 		author: User!
+		comments: [Comment!]!
 	}
 
 	type Comment {
 		id: ID!,
 		comment: String!
 		author: User!
+		post: Post!
 	}
 `;
 
@@ -121,14 +127,6 @@ const resolvers = {
 				name: "Mike",
 				email: "mike@example.com",
 				age: 28,
-			};
-		},
-		post() {
-			return {
-				id: "092",
-				title: "GraphQL",
-				body: "",
-				published: false,
 			};
 		},
 		posts(parent, args, ctx, info) {
@@ -155,6 +153,11 @@ const resolvers = {
 				return user.id === parent.author;
 			});
 		},
+		comments(parent, args, ctx, info) {
+			return comments.filter((comment) => {
+				return comment.post === parent.id;
+			});
+		},
 	},
 	User: {
 		posts(parent, args, ctx, info) {
@@ -172,6 +175,12 @@ const resolvers = {
 		author(parent, args, ctx, info) {
 			return users.find((user) => {
 				return user.id === parent.author;
+			});
+		},
+		post(parent, args, ctx, info) {
+			return posts.find((post) => {
+				console.log(post.id, parent.post);
+				return post.id === parent.post;
 			});
 		},
 	},
