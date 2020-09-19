@@ -32,7 +32,7 @@ const posts = [
 	},
 	{
 		id: "2",
-		title: "The Notebooke",
+		title: "The Notebook",
 		body: "A guy and a girl. he built her a home",
 		published: true,
 		author: "2",
@@ -60,6 +60,7 @@ const typeDefs = `
 		name: String!
 		email: String!
 		age: Int
+		posts: [Post!]!
 	}
 	
 	type Post {
@@ -118,6 +119,13 @@ const resolvers = {
 		author(parent, args, ctx, info) {
 			return users.find((user) => {
 				return user.id === parent.author;
+			});
+		},
+	},
+	User: {
+		posts(parent, args, ctx, info) {
+			return posts.filter((post) => {
+				return post.author === parent.id;
 			});
 		},
 	},
