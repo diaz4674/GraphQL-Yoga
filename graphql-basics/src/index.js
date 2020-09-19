@@ -46,6 +46,29 @@ const posts = [
 	},
 ];
 
+const comments = [
+	{
+		id: "10",
+		comment: "This book is lit!",
+		author: "1",
+	},
+	{
+		id: "11",
+		comment: "This book made me cry!",
+		author: "2",
+	},
+	{
+		id: "12",
+		comment: "I love this story!",
+		author: "3",
+	},
+	{
+		id: "13",
+		comment: "Turtle power!",
+		author: "1",
+	},
+];
+
 // Type definitions
 const typeDefs = `
     type Query {
@@ -53,6 +76,7 @@ const typeDefs = `
 		me: User!
 		post: Post!
 		posts(query: String): [Post!]
+		comment: [Comment!]!
 	}
 
 	type User {
@@ -61,6 +85,7 @@ const typeDefs = `
 		email: String!
 		age: Int
 		posts: [Post!]!
+		comments: [Comment!]!
 	}
 	
 	type Post {
@@ -68,6 +93,12 @@ const typeDefs = `
 		title: String!
 		body: String!
 		published: Boolean!
+		author: User!
+	}
+
+	type Comment {
+		id: ID!,
+		comment: String!
 		author: User!
 	}
 `;
@@ -114,6 +145,9 @@ const resolvers = {
 				}
 			});
 		},
+		comment(parent, args, ctx, info) {
+			return comments;
+		},
 	},
 	Post: {
 		author(parent, args, ctx, info) {
@@ -126,6 +160,18 @@ const resolvers = {
 		posts(parent, args, ctx, info) {
 			return posts.filter((post) => {
 				return post.author === parent.id;
+			});
+		},
+		comments(parent, args, ctx, info) {
+			return comments.filter((comment) => {
+				return comment.author === parent.id;
+			});
+		},
+	},
+	Comment: {
+		author(parent, args, ctx, info) {
+			return users.find((user) => {
+				return user.id === parent.author;
 			});
 		},
 	},
