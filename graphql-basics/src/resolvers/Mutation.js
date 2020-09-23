@@ -93,6 +93,31 @@ const Mutation = {
 
 		return post;
 	},
+	updatePost(parent, args, { db }, info) {
+		const { id, data } = args;
+
+		const post = db.posts.find((post) => {
+			return post.id === id;
+		});
+
+		if (!post) {
+			throw new Error("post not found");
+		}
+
+		if (typeof data.title === "string") {
+			post.title = data.title;
+		}
+
+		if (typeof data.body === "string") {
+			post.body = data.body;
+		}
+
+		if (typeof data.published === "boolean") {
+			post.published = data.published;
+		}
+
+		return post;
+	},
 	deletePost(parent, args, { db }, info) {
 		const postIndex = db.posts.findIndex((post) => {
 			if (post.id === args.id) {
