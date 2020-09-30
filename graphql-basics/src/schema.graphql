@@ -21,6 +21,7 @@ type Mutation {
 type Subscription {
 	count: Int!
 	comment(postId: ID!): Comment!
+	post: Post!
 }
 
 input CreateUserInput {
@@ -39,6 +40,7 @@ input createPostInput {
 	title: String!
 	body: String!
 	published: Boolean!
+	author: ID!
 }
 
 input UpdatePostInput {
